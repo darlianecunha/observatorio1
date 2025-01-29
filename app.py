@@ -1,6 +1,37 @@
 import streamlit as st
 import pandas as pd
 
+# Definir estilo global com imagem de navio
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        h1, h2 {
+            color: white;
+        }
+        .stDataFrame, .stTable {
+            background-color: black;
+            color: white;
+        }
+        .navio-bg {
+            background: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Container_ship.jpg') no-repeat center center;
+            background-size: cover;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown("<div class='navio-bg'>Dashboard de Movimentação Portuária</div>", unsafe_allow_html=True)
+
 # Carregar os dados
 @st.cache_data
 def load_data():
@@ -22,9 +53,6 @@ def load_data():
     return df
 
 df = load_data()
-
-# Configuração do layout do Streamlit
-st.markdown("<h1 style='color: darkblue;'>Dashboard de Movimentação Portuária</h1>", unsafe_allow_html=True)
 
 # Filtros
 ano_selecionado = st.sidebar.selectbox("Selecione o Ano", sorted(df["ano"].unique()))
@@ -54,7 +82,5 @@ df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].
 df_summary["movimentacao_total_t"] = df_summary["movimentacao_total_t"].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
 # Exibir tabela de dados agregados
-st.markdown("<h2 style='color: darkblue;'>Totais de Movimentação Portuária</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='color: white;'>Totais de Movimentação Portuária</h2>", unsafe_allow_html=True)
 st.dataframe(df_summary, width=1000)
-
-
