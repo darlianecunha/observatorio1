@@ -48,7 +48,7 @@ if uf_origem_selecionado != "Todos":
     df_filtered = df_filtered[df_filtered["uf_origem"] == uf_origem_selecionado]
 
 # Agregar dados por ano
-df_summary = df_filtered[["movimentacao_total_t"]].sum().to_frame().T
+df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].sum()
 
 # Formatar os números para exibição
 df_summary["movimentacao_total_t"] = df_summary["movimentacao_total_t"].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
