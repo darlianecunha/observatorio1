@@ -24,7 +24,7 @@ def load_data():
 df = load_data()
 
 # Configuração do layout do Streamlit
-st.title("Dashboard de Movimentação Portuária")
+st.markdown("<h1 style='color: darkblue;'>Dashboard de Movimentação Portuária</h1>", unsafe_allow_html=True)
 
 # Filtros
 ano_selecionado = st.sidebar.selectbox("Selecione o Ano", sorted(df["ano"].unique()))
@@ -48,13 +48,13 @@ if uf_origem_selecionado != "Todos":
     df_filtered = df_filtered[df_filtered["uf_origem"] == uf_origem_selecionado]
 
 # Agregar dados por ano
-df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].sum()
+df_summary = df_filtered[["movimentacao_total_t"]].sum().to_frame().T
 
 # Formatar os números para exibição
-pd.options.display.float_format = "{:,.2f}".format
 df_summary["movimentacao_total_t"] = df_summary["movimentacao_total_t"].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
 # Exibir tabela de dados agregados
-st.subheader("Totais de Movimentação Portuária")
-st.dataframe(df_summary)
+st.markdown("<h2 style='color: darkblue;'>Totais de Movimentação Portuária</h2>", unsafe_allow_html=True)
+st.dataframe(df_summary, width=1000)
+
 
