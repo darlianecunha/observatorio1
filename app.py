@@ -26,24 +26,14 @@ df = load_data()
 # Configuração do layout do Streamlit
 st.title("Dashboard de Movimentação Portuária")
 
-# Filtros
-anos = st.sidebar.multiselect("Selecione o Ano", df["ano"].unique(), default=df["ano"].unique())
-tipo_instalacao = st.sidebar.multiselect("Tipo de Instalação", df["tipo_instalacao"].unique(), default=df["tipo_instalacao"].unique())
-perfil_carga = st.sidebar.multiselect("Perfil da Carga", df["perfil_carga"].unique(), default=df["perfil_carga"].unique())
+# Seleção de Ano
+ano_selecionado = st.sidebar.selectbox("Selecione o Ano", sorted(df["ano"].unique()))
 
-# Aplicar filtros
-df_filtered = df[df["ano"].isin(anos) & df["tipo_instalacao"].isin(tipo_instalacao) & df["perfil_carga"].isin(perfil_carga)]
+# Filtrar dados com base no ano selecionado
+df_filtered = df[df["ano"] == ano_selecionado]
 
-# Gráficos
-fig_movimentacao = px.bar(df_filtered, x="ano", y="movimentacao_total_t", color="tipo_instalacao", title="Movimentação Portuária por Ano")
-st.plotly_chart(fig_movimentacao)
-
-fig_perfil = px.pie(df_filtered, names="perfil_carga", values="movimentacao_total_t", title="Distribuição da Carga")
-st.plotly_chart(fig_perfil)
-
-# Tabela de dados
-st.subheader("Dados Filtrados")
+# Exibir tabela de dados
+st.subheader(f"Dados para o ano {ano_selecionado}")
 st.dataframe(df_filtered)
-
 
 
