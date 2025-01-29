@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 # Carregar os dados
-@st.cache
+@st.cache_data
 def load_data():
     file_path = "dados_graficos.xlsx"
     df = pd.read_excel(file_path)
@@ -45,8 +45,5 @@ st.plotly_chart(fig_perfil)
 st.subheader("Dados Filtrados")
 st.dataframe(df_filtered)
 
-# Exportar dados como TXT
-st.subheader("Exportar Dados Filtrados")
-df_txt = df_filtered.to_csv(sep='\t', index=False)
-st.download_button(label="Baixar Dados como TXT", data=df_txt, file_name="dados_filtrados.txt", mime="text/plain")
+
 
