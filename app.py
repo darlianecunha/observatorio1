@@ -1,36 +1,28 @@
 import streamlit as st
 import pandas as pd
 
-# Definir estilo global com imagem de navio
+# Definir estilo global com fundo azul marinho e letras cinza
 st.markdown(
     """
     <style>
         body {
-            background-color: black;
-            color: white;
+            background-color: #001F3F;
+            color: #D3D3D3;
         }
         h1, h2 {
-            color: white;
+            color: #D3D3D3;
         }
         .stDataFrame, .stTable {
-            background-color: black;
-            color: white;
-        }
-        .navio-bg {
-            background: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Container_ship.jpg') no-repeat center center;
-            background-size: cover;
-            padding: 50px;
-            text-align: center;
-            color: white;
-            font-size: 30px;
-            font-weight: bold;
+            background-color: #001F3F;
+            color: #D3D3D3;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-st.markdown("<div class='navio-bg'>Dashboard de Movimentação Portuária</div>", unsafe_allow_html=True)
+# Cabeçalho do Dashboard
+st.markdown("<h1 style='text-align: center;'>Dashboard de Movimentação Portuária</h1>", unsafe_allow_html=True)
 
 # Carregar os dados
 @st.cache_data
@@ -82,5 +74,5 @@ df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].
 df_summary["movimentacao_total_t"] = df_summary["movimentacao_total_t"].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
 # Exibir tabela de dados agregados
-st.markdown("<h2 style='color: white;'>Totais de Movimentação Portuária</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Totais de Movimentação Portuária</h2>", unsafe_allow_html=True)
 st.dataframe(df_summary, width=1000)
