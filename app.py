@@ -27,25 +27,28 @@ st.title("Dashboard de Movimentação Portuária")
 
 # Filtros
 ano_selecionado = st.sidebar.selectbox("Selecione o Ano", sorted(df["ano"].unique()))
-tipo_instalacao = st.sidebar.multiselect("Tipo de Instalação", df["tipo_instalacao"].unique(), default=df["tipo_instalacao"].unique())
-perfil_carga = st.sidebar.multiselect("Perfil da Carga", df["perfil_carga"].unique(), default=df["perfil_carga"].unique())
-sentido = st.sidebar.multiselect("Sentido", df["sentido"].unique(), default=df["sentido"].unique())
-tipo_navegacao = st.sidebar.multiselect("Tipo de Navegação", df["tipo_navegacao"].unique(), default=df["tipo_navegacao"].unique())
-uf_origem = st.sidebar.multiselect("UF Origem", df["uf_origem"].unique(), default=df["uf_origem"].unique())
+tipo_instalacao_selecionado = st.sidebar.selectbox("Selecione o Tipo de Instalação", ["Todos"] + sorted(df["tipo_instalacao"].unique()))
+perfil_carga_selecionado = st.sidebar.selectbox("Selecione o Perfil da Carga", ["Todos"] + sorted(df["perfil_carga"].unique()))
+sentido_selecionado = st.sidebar.selectbox("Selecione o Sentido", ["Todos"] + sorted(df["sentido"].unique()))
+tipo_navegacao_selecionado = st.sidebar.selectbox("Selecione o Tipo de Navegação", ["Todos"] + sorted(df["tipo_navegacao"].unique()))
+uf_origem_selecionado = st.sidebar.selectbox("Selecione a UF de Origem", ["Todos"] + sorted(df["uf_origem"].unique()))
 
-# Filtrar dados com base nos filtros selecionados
-df_filtered = df[
-    (df["ano"] == ano_selecionado) &
-    (df["tipo_instalacao"].isin(tipo_instalacao)) &
-    (df["perfil_carga"].isin(perfil_carga)) &
-    (df["sentido"].isin(sentido)) &
-    (df["tipo_navegacao"].isin(tipo_navegacao)) &
-    (df["uf_origem"].isin(uf_origem))
-]
+# Aplicar filtros
+df_filtered = df[df["ano"] == ano_selecionado]
+if tipo_instalacao_selecionado != "Todos":
+    df_filtered = df_filtered[df_filtered["tipo_instalacao"] == tipo_instalacao_selecionado]
+if perfil_carga_selecionado != "Todos":
+    df_filtered = df_filtered[df_filtered["perfil_carga"] == perfil_carga_selecionado]
+if sentido_selecionado != "Todos":
+    df_filtered = df_filtered[df_filtered["sentido"] == sentido_selecionado]
+if tipo_navegacao_selecionado != "Todos":
+    df_filtered = df_filtered[df_filtered["tipo_navegacao"] == tipo_navegacao_selecionado]
+if uf_origem_selecionado != "Todos":
+    df_filtered = df_filtered[df_filtered["uf_origem"] == uf_origem_selecionado]
 
-# Agregar dados
-df_summary = df_filtered.groupby(["ano", "tipo_instalacao", "perfil_carga", "sentido", "tipo_navegacao", "uf_origem"], as_index=False)["movimentacao_total_t"].sum()
+# Agregar dados por ano
+df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].sum()
 
 # Exibir tabela de dados agregados
-st.subheader("Resumo dos Dados Filtrados")
+st.subheader("Totais de Movimentação Portuária")
 st.dataframe(df_summary)
