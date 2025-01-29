@@ -18,6 +18,7 @@ def load_data():
         'País Destino': 'pais_destino',
         'Total de Movimentação Portuária\nem toneladas (t)': 'movimentacao_total_t'
     })
+    df["ano"] = df["ano"].astype(int).astype(str)  # Garantir formato correto de ano
     return df
 
 df = load_data()
@@ -49,6 +50,11 @@ if uf_origem_selecionado != "Todos":
 # Agregar dados por ano
 df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].sum()
 
+# Formatar os números para exibição
+pd.options.display.float_format = "{:,.2f}".format
+df_summary["movimentacao_total_t"] = df_summary["movimentacao_total_t"].apply(lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+
 # Exibir tabela de dados agregados
 st.subheader("Totais de Movimentação Portuária")
 st.dataframe(df_summary)
+
