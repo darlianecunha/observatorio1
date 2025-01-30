@@ -85,3 +85,7 @@ df_summary["movimentacao_total_t"] = df_summary["movimentacao_total_t"].apply(la
 
 # Exibir tabela de dados agregados
 st.dataframe(df_summary, width=1000)
+
+# Crédito 
+st.write("Fonte: Estatístico Aquaviário ANTAQ")
+st.markdown("<p><strong>Ferramenta desenvolvida por Darliane Cunha.</strong></p>", unsafe_allow_html=True)
