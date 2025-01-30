@@ -22,7 +22,7 @@ st.markdown(
 )
 
 # Cabeçalho do Dashboard
-st.markdown("<h1 style='text-align: center;'>Dashboard de Movimentação Portuária</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #003366;'>Dashboard de Movimentação Portuária</h1>", unsafe_allow_html=True)
 
 # Carregar os dados
 @st.cache_data
@@ -76,10 +76,6 @@ if pais_origem_selecionado != "Todos":
     df_filtered = df_filtered[df_filtered["pais_origem"] == pais_origem_selecionado]
 if pais_destino_selecionado != "Todos":
     df_filtered = df_filtered[df_filtered["pais_destino"] == pais_destino_selecionado]
-
-# Criar título dinâmico com seleção
-titulo_selecionado = f"{ano_selecionado}/{tipo_instalacao_selecionado}/{sentido_selecionado}"
-st.markdown(f"<h2 style='text-align: center;'>{titulo_selecionado}</h2>", unsafe_allow_html=True)
 
 # Agregar dados por ano
 df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].sum()
