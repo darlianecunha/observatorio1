@@ -10,7 +10,7 @@ st.markdown(
             color: #D3D3D3;
         }
         h1, h2 {
-            color: #D3D3D3;
+            color: #003366;
         }
         .stDataFrame, .stTable {
             background-color: #001F3F;
@@ -46,26 +46,26 @@ def load_data():
 
 df = load_data()
 
-# Filtros
+# Filtros ampliados
+st.sidebar.header("Filtros")
 ano_selecionado = st.sidebar.selectbox("Selecione o Ano", sorted(df["ano"].unique()))
-tipo_instalacao_selecionado = st.sidebar.selectbox("Selecione o Tipo de Instalação", ["Todos"] + sorted(df["tipo_instalacao"].unique()))
-perfil_carga_selecionado = st.sidebar.selectbox("Selecione o Perfil da Carga", ["Todos"] + sorted(df["perfil_carga"].unique()))
-sentido_selecionado = st.sidebar.selectbox("Selecione o Sentido", ["Todos"] + sorted(df["sentido"].unique()))
-tipo_navegacao_selecionado = st.sidebar.selectbox("Selecione o Tipo de Navegação", ["Todos"] + sorted(df["tipo_navegacao"].unique()))
-uf_origem_selecionado = st.sidebar.selectbox("Selecione a UF de Origem", ["Todos"] + sorted(df["uf_origem"].unique()))
+tipo_instalacao_selecionado = st.sidebar.selectbox("Selecione o Tipo de Instalação", df["tipo_instalacao"].unique())
+perfil_carga_selecionado = st.sidebar.selectbox("Selecione o Perfil da Carga", df["perfil_carga"].unique())
+sentido_selecionado = st.sidebar.selectbox("Selecione o Sentido", df["sentido"].unique())
+tipo_navegacao_selecionado = st.sidebar.selectbox("Selecione o Tipo de Navegação", df["tipo_navegacao"].unique())
 
 # Aplicar filtros
-df_filtered = df[df["ano"] == ano_selecionado]
-if tipo_instalacao_selecionado != "Todos":
-    df_filtered = df_filtered[df_filtered["tipo_instalacao"] == tipo_instalacao_selecionado]
-if perfil_carga_selecionado != "Todos":
-    df_filtered = df_filtered[df_filtered["perfil_carga"] == perfil_carga_selecionado]
-if sentido_selecionado != "Todos":
-    df_filtered = df_filtered[df_filtered["sentido"] == sentido_selecionado]
-if tipo_navegacao_selecionado != "Todos":
-    df_filtered = df_filtered[df_filtered["tipo_navegacao"] == tipo_navegacao_selecionado]
-if uf_origem_selecionado != "Todos":
-    df_filtered = df_filtered[df_filtered["uf_origem"] == uf_origem_selecionado]
+df_filtered = df[
+    (df["ano"] == ano_selecionado) &
+    (df["tipo_instalacao"] == tipo_instalacao_selecionado) &
+    (df["perfil_carga"] == perfil_carga_selecionado) &
+    (df["sentido"] == sentido_selecionado) &
+    (df["tipo_navegacao"] == tipo_navegacao_selecionado)
+]
+
+# Criar título dinâmico com seleção
+titulo_selecionado = f"{ano_selecionado}/{tipo_instalacao_selecionado}/{sentido_selecionado}"
+st.markdown(f"<h2 style='text-align: center;'>{titulo_selecionado}</h2>", unsafe_allow_html=True)
 
 # Agregar dados por ano
 df_summary = df_filtered.groupby("ano", as_index=False)["movimentacao_total_t"].sum()
